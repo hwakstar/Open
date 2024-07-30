@@ -1,5 +1,5 @@
 body {
-    margin: 0;
+    margin: 20px;
   }
   
   .App {
@@ -18,4 +18,46 @@ body {
   .react-financial-charts{
     margin-left: auto;
     margin-right:auto;
+  }
+  .linecolor {
+    display: inline;
+     margin-Left: 3%;
+      margin-Top: 5%;
+  }
+  .monthlinecolor{
+    width: 30px;
+     height: 30px;
+      background-Color: red;
+       color: white;
+  }
+  .lineletter{
+    display: flex;
+     justify-Content: center;
+     align-Items: center;
+      padding-Top: 5%;
+  }
+  .yearlinecolor{
+    width: 30px;
+     height: 30px;
+      background-Color: blue;
+       color: white;
+       margin-top: 5%;
+  }
+  .daylinecolor{
+    width: 30px;
+     height: 30px;
+      background-Color: green;
+       color: white;
+       margin-top: 5%;
+  }
+  .weeklinecolor{
+    width: 30px;
+     height: 30px;
+      background-Color: brown;
+       color: white;
+       margin-top: 5%;
+  }
+  .centerlayout{
+    display: flex;
+    justify-content: center;
   }

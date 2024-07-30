@@ -9,31 +9,27 @@ import {
   Chart,
   ChartCanvas,
   CurrentCoordinate,
-  BarSeries,
+
   CandlestickSeries,
   ElderRaySeries,
   LineSeries,
-  MovingAverageTooltip,
+
   OHLCTooltip,
-  SingleValueTooltip,
   lastVisibleItemBasedZoomAnchor,
   XAxis,
   YAxis,
   StraightLine,
-  TrendLine,
-  LabelAnnotation,
-  CrossHairCursor,
-  EdgeIndicator,
   MouseCoordinateX,
   MouseCoordinateY,
-  ZoomButtons,
+
   // withDeviceRatio,
   // withSize
 } from "react-financial-charts";
 import { initialData } from "./data";
 import { createRoot } from 'react-dom/client';
-import { element } from "prop-types";
-
+// import { element } from "prop-types";
+import './styles.css';
+import reportWebVitals from './reportWebVitals';
 
 const App = () => {
   const ScaleProvider = discontinuousTimeScaleProviderBuilder().inputDateAccessor(
@@ -72,12 +68,12 @@ const App = () => {
   let today = 0;
   let month = 0;
   let year = 0;
-  let week=0;
+  let week = 0;
   data.forEach(element => {
     const dateParts = element.date.split(" ")[0].split("-"); // Split the date string by space and then by hyphen
 
     const each_year = parseInt(dateParts[0]); // Extract the year
-    const each_month = parseInt(dateParts[1]); // Extract the month
+    // const each_month = parseInt(dateParts[1]); // Extract the month
     const each_day = parseInt(dateParts[2]); // Extract the day
 
     if (new Date().getFullYear().toString() === each_year.toString()) {
@@ -95,11 +91,11 @@ const App = () => {
 
         // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
         const currentDay = currentDate.getDay();
-        
+
         // Calculate the date of the first day of the week (Sunday)
         const firstDayOfWeek = new Date(currentDate);
         firstDayOfWeek.setDate(currentDate.getDate() - currentDay);
-        
+
         // Calculate the date of the last day of the week (Saturday)
         const lastDayOfWeek = new Date(currentDate);
         lastDayOfWeek.setDate(currentDate.getDate() + (6 - currentDay));
@@ -107,19 +103,19 @@ const App = () => {
         // Check if the current date falls within the current week
         if (new Date(element.date) >= firstDayOfWeek && new Date(element.date) <= lastDayOfWeek) {
           k += 1;
-          week+=element.open;
+          week += element.open;
         } else {
-            // console.log('The current date is not within the current week.');
+          // console.log('The current date is not within the current week.');
         }
 
-        
+
       }
     }
   });
   const fixed_year = (year / data.length).toFixed(2);
   const fixed_month = (month / j).toFixed(2);
   const fixed_today = (today / i).toFixed(2);
-  const fixed_week=(week/k).toFixed(2);
+  const fixed_week = (week / k).toFixed(2);
   console.log(fixed_week)
   console.log(fixed_month)
   console.log(fixed_year)
@@ -128,54 +124,22 @@ const App = () => {
   const max = xAccessor(data[data.length - 1]);
   const min = xAccessor(data[Math.max(0, data.length - 100)]);
   const xExtents = [min, max + 5];
-
   const gridHeight = height - margin.top - margin.bottom;
-
   const elderRayHeight = 100;
   const elderRayOrigin = (_, h) => [0, h - elderRayHeight];
-  const barChartHeight = gridHeight / 4;
-  const barChartOrigin = (_, h) => [0, h - barChartHeight - elderRayHeight];
   const chartHeight = gridHeight - elderRayHeight;
-
   const dateTimeFormat = "%d %b";
   const timeDisplayFormat = timeFormat(dateTimeFormat);
-
-  const barChartExtents = (data) => {
-    return data.volume;
-  };
-
   const candleChartExtents = (data) => {
     return [data.high, data.low];
-  };
-
-  const yEdgeIndicator = (data) => {
-    return data.close;
-  };
-
-  const volumeColor = (data) => {
-    return data.close > data.open
-      ? "rgba(38, 166, 154, 0.3)"
-      : "rgba(239, 83, 80, 0.3)";
-  };
-
-  const volumeSeries = (data) => {
-    return data.volume;
-  };
-
-  const openCloseColor = (data) => {
-    return data.close > data.open ? "#26a69a" : "#ef5350";
   };
   const tickValues = [fixed_week, fixed_year, fixed_today, fixed_month]; // Specify the numbers you want to display on the y-axis
 
   return (
     <>
-      <div style={{display:'flex',justifyContent:'center'}}>
-        <div style={{display:'inline'}}>
-          <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginTop: '30px'
-            }}>
+      <div className="centerlayout">
+        <div style={{ display: 'inline' }}>
+          <div className="centerlayout" style={{ marginTop: '30px' }}>
             <div>
               <ChartCanvas
                 height={height}
@@ -234,7 +198,7 @@ const App = () => {
                     strokeStyle={'brown'}
 
                   />
-                 
+
                   <LineSeries yAccessor={ema12.accessor()} strokeStyle={ema12.stroke()} />
                   <CurrentCoordinate
                     yAccessor={ema12.accessor()}
@@ -244,8 +208,8 @@ const App = () => {
                     rectWidth={margin.right}
                     displayFormat={pricesDisplayFormat}
                   />
-                  
-                 
+
+
                   <OHLCTooltip origin={[8, 16]} />
                 </Chart>
 
@@ -275,27 +239,33 @@ const App = () => {
             </div>
           </div>
         </div>
-        <div style={{display:'inline',marginLeft:'5%',marginTop:'3%'}}>
-            <div style={{width:'30px',height:'30px',backgroundColor:'red',color:'white'}}>
-                <div style={{display:'flex',justifyContent:'center',alignItems:'center',paddingTop:'15%'}}>M</div>
-            </div>
-            <div style={{width:'30px',height:'30px',backgroundColor:'blue',marginTop:'5%',color:'white'}}>
-              <div style={{display:'flex',justifyContent:'center',alignItems:'center',paddingTop:'15%'}}>Y</div>
-            </div>
-            <div style={{width:'30px',height:'30px',backgroundColor:'green',marginTop:'5%',color:'white'}}>
-              <div style={{display:'flex',justifyContent:'center',alignItems:'center',paddingTop:'15%'}}>D</div>
-            </div>
-            <div style={{width:'30px',height:'30px',backgroundColor:'brown',marginTop:'5%',color:'white'}}>
-              <div style={{display:'flex',justifyContent:'center',alignItems:'center',paddingTop:'15%'}}>W</div>
-            </div>
+        <div className='linecolor' >
+          <div className="monthlinecolor" >
+            <div className="lineletter">M</div>
+          </div>
+          <div className="yearlinecolor">
+            <div className="lineletter">Y</div>
+          </div>
+          <div className="daylinecolor">
+            <div className="lineletter">D</div>
+          </div>
+          <div className="weeklinecolor">
+            <div className="lineletter">W</div>
+          </div>
         </div>
       </div>
-      <div style={{display: 'flex',justifyContent: 'center',}}>
-          <h2>Daily Weekly Monthly Yearly Opens</h2>
+      <div className="centerlayout">
+        <h2>Daily Weekly Monthly Yearly Opens</h2>
       </div>
     </>
   );
+
 };
 const root = createRoot(document.getElementById('root'));
 root.render(<App />);
 
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
